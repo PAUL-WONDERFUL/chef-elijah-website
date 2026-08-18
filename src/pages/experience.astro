@@ -1,0 +1,133 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const timeline = [
+  { year: '1990', role: 'Pastry Chef', place: 'Sheraton Kampala Hotel' },
+  { year: '2004', role: 'Pastry Chef', place: 'Coral Deira, Dubai, U.A.E.' },
+  { year: '2016', role: 'Pastry Consultant', place: 'Sheraton Constellations Kampala' },
+  { year: '2017', role: 'Executive Sous Chef', place: 'Sheraton Kampala Hotel' },
+];
+
+const leadership = [
+  { role: 'Food Production Manager', place: 'Essella Country Hotel, Kiira' },
+  { role: 'General Manager', place: 'Kyangabi Crater Resort' },
+  { role: 'General Manager', place: 'Forest View' },
+  { role: 'Operations Manager', place: 'Tilenga Safari Lodge, Pakwach' },
+  { role: 'Food & Beverages Consultant Manager', place: 'Crested Crane Hotel' },
+  { role: 'C.E.O', place: 'The Special Quality Bakers, Wakiso' },
+];
+
+const training = [
+  'Diploma in Hotels and Institutional Catering',
+  'Certificate in Chocolate Works and Related Desserts — Sheraton Doha Hotel and Resort, Qatar',
+  'European Dessert Assortment — Carma, Switzerland',
+  'Diploma in Master Bakers — Switzerland',
+  'Cross-training exposure at Sheraton Down Town Brussels',
+  'Sheraton Brussels Airport Hotel, Belgium',
+  'Certificate in Art of Buffet Set Ups and Dessert Assortment — Sheraton Brussels Downtown, Belgium',
+];
+---
+
+<Layout title="Experience" description="Career timeline and training for Chef Elijah Kaseregenyi.">
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Career</span>
+      <h1>Experience</h1>
+      <p class="lede">A career built across pastry kitchens, executive roles, and hospitality leadership.</p>
+
+      <h2>Kitchen &amp; Pastry Career</h2>
+      <ol class="timeline">
+        {timeline.map((item) => (
+          <li class="timeline__item">
+            <span class="timeline__year">{item.year}</span>
+            <div>
+              <strong>{item.role}</strong>
+              <div class="timeline__place">{item.place}</div>
+            </div>
+          </li>
+        ))}
+      </ol>
+
+      <h2>Leadership &amp; Consultant Roles</h2>
+      <p class="section-note">More recent roles beyond the kitchen, in hotel and resort operations.</p>
+      <div class="grid grid--2">
+        {leadership.map((item) => (
+          <div class="card">
+            <strong>{item.role}</strong>
+            <div class="timeline__place">{item.place}</div>
+          </div>
+        ))}
+      </div>
+
+      <h2>Training &amp; Education</h2>
+      <ul class="training-list">
+        {training.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .lede {
+    font-size: 1.1rem;
+    color: var(--ink-soft);
+    max-width: 640px;
+  }
+
+  h2 {
+    margin-top: 2.5rem;
+  }
+
+  .section-note {
+    color: var(--ink-soft);
+    margin-top: -0.5rem;
+  }
+
+  .timeline {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-left: 2px solid var(--border);
+  }
+
+  .timeline__item {
+    display: flex;
+    gap: 1.25rem;
+    padding: 0 0 1.5rem 1.5rem;
+    position: relative;
+  }
+
+  .timeline__item::before {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: 4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .timeline__year {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--accent-dark);
+    min-width: 3.5rem;
+  }
+
+  .timeline__place {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+
+  .training-list {
+    color: var(--ink-soft);
+    padding-left: 1.2rem;
+  }
+
+  .training-list li {
+    margin-bottom: 0.5rem;
+  }
+</style>

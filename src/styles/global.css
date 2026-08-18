@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #faf7f2;
+  --bg-alt: #f1ebe1;
+  --ink: #2b2320;
+  --ink-soft: #5c5148;
+  --accent: #a8762f;
+  --accent-dark: #7d551f;
+  --border: #e2d8c8;
+  --max-width: 1080px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Playfair Display', Georgia, serif;
+  color: var(--ink);
+  line-height: 1.2;
+  margin: 0 0 0.5em;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: var(--accent-dark);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section {
+  padding: 4rem 0;
+}
+
+.section--alt {
+  background: var(--bg-alt);
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent-dark);
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.75rem;
+  border-radius: 2px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid var(--accent);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background: var(--accent-dark);
+  border-color: var(--accent-dark);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--accent-dark);
+}
+
+.btn--ghost:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.75rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.grid--2 {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.grid--3 {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.tag {
+  display: inline-block;
+  font-size: 0.78rem;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  color: var(--ink-soft);
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  margin: 0 0.4rem 0.4rem 0;
+}
+
+.placeholder-box {
+  border: 1px dashed var(--border);
+  background: var(--bg-alt);
+  color: var(--ink-soft);
+  padding: 3rem 1.5rem;
+  text-align: center;
+  border-radius: 6px;
+}

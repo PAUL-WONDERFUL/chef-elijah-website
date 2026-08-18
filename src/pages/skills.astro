@@ -1,0 +1,92 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const skills = [
+  'High classic desserts setups',
+  'Kitchen administration and layouts',
+  'Food cost consciousness and control',
+  'Food safety, hygiene awareness and control',
+  'Team building and staff motivation',
+  'Menu engineering and regional rotation',
+  'Chocolate art, decoration, pralines and truffles',
+  'Store management, record tracking and H.A.C.C.P compliance',
+];
+
+const awards = [
+  'Best Chef of the Year — outstanding Christmas buffet set up',
+  'Gold Medal, SUSTA Basket Challenge 2008 — Radisson SAS Dubai Deira',
+  'Gold Medal, Black Box Cooking Competition (judged by George Foreman)',
+  "Honors of Chairman's Club — ITT Sheraton, for exemplary guest service",
+  'Senior Member, Emirates Culinary Guild (2007)',
+];
+
+const certifications = [
+  'Top Quality Management (T.Q.M) skills',
+  'Kitchen hygiene — Diversey Kenya',
+  'Basic techniques in Italian cuisine',
+  'Leadership at Sheraton (L.A.S)',
+  'Train the Trainer (T.T.T) — Master Class International',
+  'Foundation Skills in Productivity Measurement (IPS)',
+  'Sheraton Guest Standards',
+  'International Cake Making — Kursusbevis',
+  'General Management Skills and L.A.S 2000',
+  'Team Building — Thomas and Associates Ltd',
+  'Theoretical and practical instruction for European parties — Martin Braun Backmittel und Essenzen KG',
+  'Bread Technology and Pastry Making — Ulmerspatz Diamalt, Germany',
+  'Windows, Word, Excel, PowerPoint and Internet — Al Mihad Educational Institute, Dubai',
+];
+---
+
+<Layout title="Skills & Certifications" description="Skills, certifications and awards of Chef Elijah Kaseregenyi.">
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Expertise</span>
+      <h1>Skills &amp; Certifications</h1>
+
+      <h2>Core Skills</h2>
+      <div class="grid grid--2">
+        {skills.map((skill) => (
+          <div class="card skill-card">{skill}</div>
+        ))}
+      </div>
+
+      <h2>Awards &amp; Recognition</h2>
+      <ul class="list">
+        {awards.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+
+      <h2>Certifications</h2>
+      <div class="tags">
+        {certifications.map((item) => (
+          <span class="tag">{item}</span>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  h2 {
+    margin-top: 2.5rem;
+  }
+
+  .skill-card {
+    font-weight: 500;
+  }
+
+  .list {
+    color: var(--ink-soft);
+    padding-left: 1.2rem;
+  }
+
+  .list li {
+    margin-bottom: 0.5rem;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+  }
+</style>

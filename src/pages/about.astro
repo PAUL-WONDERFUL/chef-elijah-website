@@ -1,0 +1,93 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const languages = [
+  { name: 'English', level: 'Very Good' },
+  { name: 'French', level: 'Good' },
+  { name: 'Swahili', level: 'Very Good' },
+];
+---
+
+<Layout title="About" description="About Chef Elijah Kaseregenyi — career, training and background.">
+  <section class="section">
+    <div class="container about">
+      <span class="eyebrow">About</span>
+      <h1>Chef Elijah Kaseregenyi</h1>
+      <p class="lede">
+        Chef Elijah is a Chef and Confectioner General with over 35 years of
+        experience in professional kitchens, pastry, and hospitality leadership,
+        spanning Uganda, the U.A.E., Switzerland, Germany, Qatar, and Belgium.
+      </p>
+
+      <h2>Career Objective</h2>
+      <p>To sustain, uphold and accomplish all kitchen and food related tasks.</p>
+
+      <h2>Background</h2>
+      <p>
+        Chef Elijah began his career as a Pastry Chef at Sheraton Kampala Hotel in
+        1990, later joining Coral Deira in Dubai, U.A.E. He returned to Sheraton
+        Kampala as Pastry Consultant and was later appointed Executive Sous Chef.
+        His training took him across Europe and the Middle East — including a
+        Diploma in Master Bakers from Switzerland, chocolate work certification
+        from Sheraton Doha, and cross-training at Sheraton properties in Brussels.
+      </p>
+      <p>
+        Beyond the kitchen, he has gone on to hold general management and
+        consultant roles across Uganda's hospitality industry, including Food
+        Production Manager at Essella Country Hotel Kiira, General Manager at
+        Kyangabi Crater Resort and Forest View, Operations Manager at Tilenga
+        Safari Lodge in Pakwach, Food &amp; Beverages Consultant Manager at
+        Crested Crane Hotel, and currently C.E.O of The Special Quality Bakers,
+        Wakiso.
+      </p>
+
+      <h2>Languages</h2>
+      <ul class="languages">
+        {languages.map((lang) => (
+          <li><strong>{lang.name}</strong> — {lang.level}</li>
+        ))}
+      </ul>
+
+      <div class="cta-row">
+        <a class="btn btn--primary" href="/experience">See Full Experience</a>
+        <a class="btn btn--ghost" href="/contact">Contact Chef Elijah</a>
+      </div>
+
+      <p class="references-note">Professional references available on request.</p>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .about {
+    max-width: 720px;
+  }
+
+  .lede {
+    font-size: 1.1rem;
+    color: var(--ink-soft);
+  }
+
+  .languages {
+    padding-left: 1.2rem;
+    color: var(--ink-soft);
+  }
+
+  .languages li {
+    margin-bottom: 0.35rem;
+  }
+
+  .cta-row {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .references-note {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+</style>

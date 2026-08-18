@@ -1,0 +1,138 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+---
+
+<Layout title="Contact" description="Contact Chef Elijah Kaseregenyi for catering, consulting and enquiries.">
+  <section class="section">
+    <div class="container contact-grid">
+      <div>
+        <span class="eyebrow">Contact</span>
+        <h1>Get in Touch</h1>
+        <p class="lede">
+          For catering, consulting, pastry training or bakery enquiries, send a
+          message below or reach out directly.
+        </p>
+
+        <div class="contact-details">
+          <div>
+            <span class="contact-label">Phone</span>
+            <a href="tel:+256772428337">+256 772 428 337</a>
+          </div>
+          <div>
+            <span class="contact-label">Email</span>
+            <a href="mailto:elijahkaseregenyiug@gmail.com">elijahkaseregenyiug@gmail.com</a>
+          </div>
+        </div>
+      </div>
+
+      <form class="card contact-form" action={FORMSPREE_ENDPOINT} method="POST">
+        <label>
+          Full Name
+          <input type="text" name="name" required />
+        </label>
+        <label>
+          Email
+          <input type="email" name="email" required />
+        </label>
+        <label>
+          Phone
+          <input type="tel" name="phone" />
+        </label>
+        <label>
+          Service Interested In
+          <select name="service">
+            <option value="">Select an option</option>
+            <option value="Private Catering">Private Catering</option>
+            <option value="Consulting">Consulting</option>
+            <option value="Pastry / Bakery Training">Pastry / Bakery Training</option>
+            <option value="Bakery Orders">Bakery Orders</option>
+            <option value="Other">Other</option>
+          </select>
+        </label>
+        <label>
+          Message
+          <textarea name="message" rows="5" required></textarea>
+        </label>
+        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+        <button type="submit" class="btn btn--primary">Send Message</button>
+      </form>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .lede {
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+  }
+
+  .contact-details {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .contact-label {
+    display: block;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    margin-bottom: 0.2rem;
+  }
+
+  .contact-details a {
+    text-decoration: none;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .contact-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+  }
+
+  .contact-form input,
+  .contact-form select,
+  .contact-form textarea {
+    font: inherit;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg);
+    color: var(--ink);
+  }
+
+  .contact-form button {
+    align-self: flex-start;
+    margin-top: 0.5rem;
+    border: none;
+    cursor: pointer;
+  }
+
+  @media (max-width: 720px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

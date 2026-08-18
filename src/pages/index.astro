@@ -1,0 +1,106 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const highlights = [
+  { number: '35+', label: 'Years in professional kitchens' },
+  { number: '4', label: 'Countries worked across' },
+  { number: '6', label: 'Leadership & consultant roles' },
+];
+---
+
+<Layout title="Home">
+  <section class="hero section">
+    <div class="container hero__inner">
+      <span class="eyebrow">Chef &amp; Confectioner General</span>
+      <h1>Chef Elijah Kaseregenyi</h1>
+      <p class="hero__lede">
+        Over three decades of pastry craft and kitchen leadership — from Sheraton
+        Kampala to Dubai, and hotels and resorts across Uganda — bringing classic
+        technique, chocolate artistry, and disciplined kitchen management to every
+        table.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="/contact">Get in Touch</a>
+        <a class="btn btn--ghost" href="/experience">View Experience</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container grid grid--3">
+      {highlights.map((item) => (
+        <div class="card highlight">
+          <div class="highlight__number">{item.number}</div>
+          <div class="highlight__label">{item.label}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container intro">
+      <div>
+        <span class="eyebrow">Career Objective</span>
+        <h2>Kitchen and food excellence, uncompromised.</h2>
+        <p>
+          Chef Elijah has held executive kitchen roles at Sheraton Kampala Hotel and
+          Coral Deira Dubai, trained in Switzerland, Germany, Qatar and Belgium, and
+          gone on to lead operations and food &amp; beverage teams at resorts and
+          hotels across Uganda — most recently as C.E.O of The Special Quality
+          Bakers, Wakiso.
+        </p>
+        <a class="btn btn--ghost" href="/about">Read Full Bio &rarr;</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero {
+    padding-top: 5rem;
+    padding-bottom: 4rem;
+  }
+
+  .hero__inner {
+    max-width: 720px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.25rem, 5vw, 3.25rem);
+    margin-bottom: 0.6rem;
+  }
+
+  .hero__lede {
+    font-size: 1.1rem;
+    color: var(--ink-soft);
+    max-width: 620px;
+  }
+
+  .hero__actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .highlight {
+    text-align: center;
+  }
+
+  .highlight__number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.25rem;
+    color: var(--accent-dark);
+    font-weight: 700;
+  }
+
+  .highlight__label {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    margin-top: 0.25rem;
+  }
+
+  .intro {
+    max-width: 720px;
+  }
+</style>
