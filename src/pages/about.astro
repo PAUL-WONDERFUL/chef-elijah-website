@@ -1,5 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import withColleague from '../assets/images/chef-elijah-with-colleague.jpg';
+import dessertDisplay from '../assets/images/chef-elijah-dessert-display.jpg';
 
 const languages = [
   { name: 'English', level: 'Very Good' },
@@ -41,6 +44,15 @@ const languages = [
         Wakiso.
       </p>
 
+      <div class="photo-row">
+        <figure>
+          <Image src={withColleague} alt="Chef Elijah Kaseregenyi with a fellow chef at an East African culinary event" width={500} height={625} />
+        </figure>
+        <figure>
+          <Image src={dessertDisplay} alt="Chef Elijah Kaseregenyi presenting a dessert and pastry display" width={500} height={625} />
+        </figure>
+      </div>
+
       <h2>Languages</h2>
       <ul class="languages">
         {languages.map((lang) => (
@@ -66,6 +78,32 @@ const languages = [
   .lede {
     font-size: 1.1rem;
     color: var(--ink-soft);
+  }
+
+  .photo-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin: 2rem 0;
+  }
+
+  .photo-row figure {
+    margin: 0;
+  }
+
+  .photo-row :global(img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  @media (max-width: 560px) {
+    .photo-row {
+      grid-template-columns: 1fr;
+    }
   }
 
   .languages {

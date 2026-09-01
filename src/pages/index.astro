@@ -1,5 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import chefPortrait from '../assets/images/chef-elijah-portrait.jpg';
 
 const highlights = [
   { number: '35+', label: 'Years in professional kitchens' },
@@ -11,17 +13,22 @@ const highlights = [
 <Layout title="Home">
   <section class="hero section">
     <div class="container hero__inner">
-      <span class="eyebrow">Chef &amp; Confectioner General</span>
-      <h1>Chef Elijah Kaseregenyi</h1>
-      <p class="hero__lede">
-        Over three decades of pastry craft and kitchen leadership — from Sheraton
-        Kampala to Dubai, and hotels and resorts across Uganda — bringing classic
-        technique, chocolate artistry, and disciplined kitchen management to every
-        table.
-      </p>
-      <div class="hero__actions">
-        <a class="btn btn--primary" href="/contact">Get in Touch</a>
-        <a class="btn btn--ghost" href="/experience">View Experience</a>
+      <div class="hero__text">
+        <span class="eyebrow">Chef &amp; Confectioner General</span>
+        <h1>Chef Elijah Kaseregenyi</h1>
+        <p class="hero__lede">
+          Over three decades of pastry craft and kitchen leadership — from Sheraton
+          Kampala to Dubai, and hotels and resorts across Uganda — bringing classic
+          technique, chocolate artistry, and disciplined kitchen management to every
+          table.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="/contact">Get in Touch</a>
+          <a class="btn btn--ghost" href="/experience">View Experience</a>
+        </div>
+      </div>
+      <div class="hero__portrait">
+        <Image src={chefPortrait} alt="Chef Elijah Kaseregenyi" width={420} height={520} />
       </div>
     </div>
   </section>
@@ -62,7 +69,10 @@ const highlights = [
   }
 
   .hero__inner {
-    max-width: 720px;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 3rem;
+    align-items: center;
   }
 
   .hero h1 {
@@ -81,6 +91,26 @@ const highlights = [
     gap: 1rem;
     margin-top: 1.5rem;
     flex-wrap: wrap;
+  }
+
+  .hero__portrait :global(img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 420 / 520;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  @media (max-width: 780px) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .hero__portrait {
+      max-width: 320px;
+      margin: 0 auto;
+    }
   }
 
   .highlight {
