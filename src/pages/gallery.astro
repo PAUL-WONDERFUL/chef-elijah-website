@@ -1,18 +1,34 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getManifest } from '../lib/blobStore';
+
+export const prerender = false;
+
+const manifest = await getManifest();
 ---
 
 <Layout title="Gallery" description="Photo gallery of Chef Elijah Kaseregenyi's work.">
   <section class="section">
-    <div class="container narrow">
+    <div class="container">
       <span class="eyebrow">Gallery</span>
       <h1>Gallery</h1>
-      <p class="lede">
-        Photos of desserts, buffet setups and kitchen work are coming soon.
-      </p>
-      <div class="placeholder-box">
-        Photo gallery will be added here.
-      </div>
+
+      {manifest.galleryImages.length === 0 ? (
+        <div class="narrow">
+          <p class="lede">
+            Photos of desserts, buffet setups and kitchen work are coming soon.
+          </p>
+          <div class="placeholder-box">
+            Photo gallery will be added here.
+          </div>
+        </div>
+      ) : (
+        <div class="gallery-grid">
+          {manifest.galleryImages.map((img) => (
+            <img src={img.url} alt="Chef Elijah Kaseregenyi's work" loading="lazy" />
+          ))}
+        </div>
+      )}
     </div>
   </section>
 </Layout>
@@ -25,5 +41,20 @@ import Layout from '../layouts/Layout.astro';
   .lede {
     color: var(--ink-soft);
     font-size: 1.05rem;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+
+  .gallery-grid img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--border);
   }
 </style>

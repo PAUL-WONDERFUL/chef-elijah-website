@@ -12,6 +12,9 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.2.3"
+    "@astrojs/vercel": "^11.0.10",
+    "@vercel/blob": "^2.8.0",
+    "astro": "^7.2.3",
+    "bcryptjs": "^3.0.3"
   }
 }

@@ -2,12 +2,18 @@
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import chefPortrait from '../assets/images/chef-elijah-portrait.jpg';
+import { getManifest } from '../lib/blobStore';
+
+export const prerender = false;
 
 const highlights = [
   { number: '35+', label: 'Years in professional kitchens' },
   { number: '4', label: 'Countries worked across' },
   { number: '6', label: 'Leadership & consultant roles' },
 ];
+
+const manifest = await getManifest();
+const profileImageUrl = manifest.profileImageUrl;
 ---
 
 <Layout title="Home">
@@ -28,7 +34,11 @@ const highlights = [
         </div>
       </div>
       <div class="hero__portrait">
-        <Image src={chefPortrait} alt="Chef Elijah Kaseregenyi" width={420} height={520} />
+        {profileImageUrl ? (
+          <img src={profileImageUrl} alt="Chef Elijah Kaseregenyi" width="420" height="520" />
+        ) : (
+          <Image src={chefPortrait} alt="Chef Elijah Kaseregenyi" width={420} height={520} />
+        )}
       </div>
     </div>
   </section>

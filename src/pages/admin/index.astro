@@ -1,0 +1,240 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { verifySessionToken, COOKIE_NAME } from '../../lib/auth';
+import { getManifest } from '../../lib/blobStore';
+import chefPortrait from '../../assets/images/chef-elijah-portrait.jpg';
+
+export const prerender = false;
+
+const username = verifySessionToken(Astro.cookies.get(COOKIE_NAME)?.value);
+const loginError = Astro.url.searchParams.get('error');
+const uploadSuccess = Astro.url.searchParams.get('success');
+
+const errorMessages: Record<string, string> = {
+  '1': 'Incorrect username or password.',
+  nofile: 'Please choose a photo to upload.',
+  toolarge: 'That photo is too large — please use one under 4MB.',
+  badtype: 'Please upload a JPG, PNG or WebP image.',
+};
+
+const manifest = username ? await getManifest() : null;
+const currentProfileUrl = manifest?.profileImageUrl ?? chefPortrait.src;
+---
+
+<Layout title="Admin" description="Admin dashboard for managing site photos.">
+  <section class="section">
+    <div class="container narrow">
+      {!username && (
+        <>
+          <span class="eyebrow">Admin</span>
+          <h1>Sign In</h1>
+          {loginError && <p class="notice notice--error">{errorMessages[loginError] ?? 'Something went wrong. Please try again.'}</p>}
+          <form class="card login-form" method="POST" action="/api/login">
+            <label>
+              Username
+              <input type="text" name="username" autocomplete="username" required />
+            </label>
+            <label>
+              Password
+              <input type="password" name="password" autocomplete="current-password" required />
+            </label>
+            <button type="submit" class="btn btn--primary">Sign In</button>
+          </form>
+        </>
+      )}
+
+      {username && manifest && (
+        <>
+          <div class="admin-header">
+            <div>
+              <span class="eyebrow">Admin</span>
+              <h1>Welcome, {username}</h1>
+            </div>
+            <form method="POST" action="/api/logout">
+              <button type="submit" class="btn btn--ghost">Log Out</button>
+            </form>
+          </div>
+
+          {uploadSuccess && <p class="notice notice--success">Saved.</p>}
+          {loginError && <p class="notice notice--error">{errorMessages[loginError] ?? 'Something went wrong. Please try again.'}</p>}
+
+          <h2>Profile Picture</h2>
+          <p class="hint">This photo appears on the homepage. Uploading a new one replaces it. Max 4MB — JPG, PNG or WebP.</p>
+          <div class="profile-section">
+            <img class="profile-preview" src={currentProfileUrl} alt="Current profile" width="160" height="200" />
+            <form class="upload-form" method="POST" action="/api/upload" enctype="multipart/form-data">
+              <input type="hidden" name="kind" value="profile" />
+              <input type="file" name="file" accept="image/jpeg,image/png,image/webp" required />
+              <button type="submit" class="btn btn--primary">Upload New Profile Picture</button>
+            </form>
+          </div>
+
+          <h2>Gallery</h2>
+          <p class="hint">Photos added here appear on the Gallery page. Max 4MB per photo — JPG, PNG or WebP.</p>
+          <form class="upload-form" method="POST" action="/api/upload" enctype="multipart/form-data">
+            <input type="hidden" name="kind" value="gallery" />
+            <input type="file" name="file" accept="image/jpeg,image/png,image/webp" required />
+            <button type="submit" class="btn btn--primary">Add Photo to Gallery</button>
+          </form>
+
+          {manifest.galleryImages.length === 0 ? (
+            <p class="hint" style="margin-top:1.5rem;">No gallery photos yet — add your first one above.</p>
+          ) : (
+            <div class="gallery-grid">
+              {manifest.galleryImages.map((img) => (
+                <div class="gallery-item">
+                  <img src={img.url} alt="Gallery photo" loading="lazy" />
+                  <form method="POST" action="/api/gallery-delete">
+                    <input type="hidden" name="pathname" value={img.pathname} />
+                    <button type="submit" class="btn-delete">Delete</button>
+                  </form>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .narrow {
+    max-width: 720px;
+  }
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    max-width: 380px;
+  }
+
+  .login-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+  }
+
+  .login-form input {
+    font: inherit;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg);
+    color: var(--ink);
+  }
+
+  .login-form button {
+    border: none;
+    cursor: pointer;
+    align-self: flex-start;
+  }
+
+  .admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .admin-header button {
+    border: none;
+    cursor: pointer;
+  }
+
+  .notice {
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    margin: 1rem 0;
+  }
+
+  .notice--error {
+    background: #fbe9e7;
+    color: #8a3324;
+    border: 1px solid #e8b4a8;
+  }
+
+  .notice--success {
+    background: #eaf3e6;
+    color: #33502a;
+    border: 1px solid #b9d8ab;
+  }
+
+  h2 {
+    margin-top: 2.5rem;
+  }
+
+  .hint {
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    margin-top: -0.5rem;
+  }
+
+  .profile-section {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .profile-preview {
+    width: 160px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .upload-form button {
+    border: none;
+    cursor: pointer;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .gallery-item {
+    position: relative;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+
+  .btn-delete {
+    margin-top: 0.4rem;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #d9998a;
+    color: #8a3324;
+    padding: 0.35rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+
+  .btn-delete:hover {
+    background: #fbe9e7;
+  }
+</style>
