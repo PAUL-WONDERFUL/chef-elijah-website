@@ -45,10 +45,10 @@ const languages = [
       </p>
 
       <div class="photo-row">
-        <figure>
+        <figure class="img-zoom">
           <Image src={withColleague} alt="Chef Elijah Kaseregenyi with a fellow chef at an East African culinary event" width={500} height={625} />
         </figure>
-        <figure>
+        <figure class="img-zoom">
           <Image src={dessertDisplay} alt="Chef Elijah Kaseregenyi presenting a dessert and pastry display" width={500} height={625} />
         </figure>
       </div>
@@ -89,6 +89,8 @@ const languages = [
 
   .photo-row figure {
     margin: 0;
+    border-radius: 8px;
+    border: 1px solid var(--border);
   }
 
   .photo-row :global(img) {
@@ -96,8 +98,6 @@ const languages = [
     height: auto;
     aspect-ratio: 4 / 5;
     object-fit: cover;
-    border-radius: 8px;
-    border: 1px solid var(--border);
   }
 
   @media (max-width: 560px) {

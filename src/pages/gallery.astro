@@ -25,7 +25,9 @@ const manifest = await getManifest();
       ) : (
         <div class="gallery-grid">
           {manifest.galleryImages.map((img) => (
-            <img src={img.url} alt="Chef Elijah Kaseregenyi's work" loading="lazy" />
+            <div class="img-zoom gallery-tile">
+              <img src={img.url} alt="Chef Elijah Kaseregenyi's work" loading="lazy" />
+            </div>
           ))}
         </div>
       )}
@@ -50,11 +52,14 @@ const manifest = await getManifest();
     margin-top: 1.5rem;
   }
 
+  .gallery-tile {
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
   .gallery-grid img {
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
-    border-radius: 8px;
-    border: 1px solid var(--border);
   }
 </style>

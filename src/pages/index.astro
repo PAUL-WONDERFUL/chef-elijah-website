@@ -19,7 +19,7 @@ const profileImageUrl = manifest.profileImageUrl;
 <Layout title="Home">
   <section class="hero section">
     <div class="container hero__inner">
-      <div class="hero__text">
+      <div class="hero__text hero-enter">
         <span class="eyebrow">Chef &amp; Confectioner General</span>
         <h1>Chef Elijah Kaseregenyi</h1>
         <p class="hero__lede">
@@ -33,7 +33,7 @@ const profileImageUrl = manifest.profileImageUrl;
           <a class="btn btn--ghost" href="/experience">View Experience</a>
         </div>
       </div>
-      <div class="hero__portrait">
+      <div class="hero__portrait hero-enter img-zoom" style="animation-delay: 0.15s;">
         {profileImageUrl ? (
           <img src={profileImageUrl} alt="Chef Elijah Kaseregenyi" width="420" height="520" />
         ) : (
@@ -71,6 +71,48 @@ const profileImageUrl = manifest.profileImageUrl;
     </div>
   </section>
 </Layout>
+
+<script>
+  function initCounters() {
+    const counters = document.querySelectorAll<HTMLElement>('.highlight__number');
+    if (!counters.length) return;
+
+    const animate = (el: HTMLElement) => {
+      const raw = el.textContent || '';
+      const match = raw.match(/\d+/);
+      if (!match || match.index === undefined) return;
+      const target = parseInt(match[0], 10);
+      const suffix = raw.slice(match.index + match[0].length);
+      const duration = 900;
+      const start = performance.now();
+
+      function tick(now: number) {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = `${Math.round(eased * target)}${suffix}`;
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    };
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animate(entry.target as HTMLElement);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    counters.forEach((el) => observer.observe(el));
+  }
+
+  document.addEventListener('astro:page-load', initCounters);
+</script>
 
 <style>
   .hero {

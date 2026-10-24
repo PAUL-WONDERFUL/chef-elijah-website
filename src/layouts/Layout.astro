@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
 
 interface Props {
   title: string;
@@ -27,6 +28,7 @@ const navLinks = [
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title} | Chef Elijah Kaseregenyi</title>
     <meta name="description" content={description} />
+    <ClientRouter />
   </head>
   <body>
     <header class="site-header">
@@ -61,11 +63,41 @@ const navLinks = [
     </footer>
 
     <script>
-      const toggle = document.getElementById('navToggle');
-      const list = document.getElementById('navList');
-      toggle?.addEventListener('click', () => {
-        const isOpen = list?.classList.toggle('is-open');
-        toggle.setAttribute('aria-expanded', String(!!isOpen));
+      function initNavToggle() {
+        const toggle = document.getElementById('navToggle');
+        const list = document.getElementById('navList');
+        toggle?.addEventListener('click', () => {
+          const isOpen = list?.classList.toggle('is-open');
+          toggle.setAttribute('aria-expanded', String(!!isOpen));
+        });
+      }
+
+      function initScrollReveal() {
+        const targets = document.querySelectorAll(
+          '.section:not(.hero) .card, .section:not(.hero) h2, .highlight, .gallery-grid .img-zoom, .photo-row figure, .timeline__item, .gallery-item'
+        );
+        targets.forEach((el) => el.classList.add('reveal-target'));
+
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduceMotion) return;
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+        );
+        targets.forEach((el) => observer.observe(el));
+      }
+
+      document.addEventListener('astro:page-load', () => {
+        initNavToggle();
+        initScrollReveal();
       });
     </script>
 
@@ -92,6 +124,11 @@ const navLinks = [
         font-size: 1.25rem;
         color: var(--ink);
         text-decoration: none;
+        transition: opacity 0.2s ease;
+      }
+
+      .brand:hover {
+        opacity: 0.75;
       }
 
       .brand span {
@@ -111,10 +148,30 @@ const navLinks = [
         color: var(--ink-soft);
         font-weight: 500;
         font-size: 0.95rem;
+        position: relative;
+        padding-bottom: 2px;
+      }
+
+      .nav__list a::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 100%;
+        height: 1.5px;
+        background: var(--accent);
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 0.3s ease;
       }
 
       .nav__list a:hover {
         color: var(--accent-dark);
+      }
+
+      .nav__list a:hover::after {
+        transform: scaleX(1);
+        transform-origin: left;
       }
 
       .nav__toggle {

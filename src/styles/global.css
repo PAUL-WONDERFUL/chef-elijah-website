@@ -78,7 +78,17 @@ img {
   font-weight: 600;
   text-decoration: none;
   border: 1px solid var(--accent);
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -12px rgba(168, 118, 47, 0.55);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 .btn--primary {
@@ -106,6 +116,26 @@ img {
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 1.75rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+  box-shadow: 0 16px 32px -20px rgba(43, 35, 32, 0.25), 0 0 0 1px rgba(168, 118, 47, 0.15);
+}
+
+.img-zoom {
+  overflow: hidden;
+  display: block;
+}
+
+.img-zoom img {
+  transition: transform 0.5s ease;
+}
+
+.img-zoom:hover img {
+  transform: scale(1.06);
 }
 
 .grid {
@@ -139,4 +169,57 @@ img {
   padding: 3rem 1.5rem;
   text-align: center;
   border-radius: 6px;
+}
+
+/* Scroll-reveal */
+.reveal-target {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal-target.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero entrance */
+@keyframes fade-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-enter {
+  animation: fade-slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-target {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .hero-enter {
+    animation: none;
+  }
+
+  .btn:hover,
+  .card:hover,
+  .img-zoom:hover img {
+    transform: none;
+  }
+}
+
+/* View transitions */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.35s;
+  animation-timing-function: ease;
 }
