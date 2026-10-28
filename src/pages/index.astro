@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import chefPortrait from '../assets/images/chef-elijah-portrait.jpg';
+import chefPortraitCutout from '../assets/images/chef-elijah-portrait-cutout.png';
 import specialtyDesserts from '../assets/images/specialty-desserts.jpg';
 import specialtyPastry from '../assets/images/specialty-pastry.jpg';
 import specialtyCatering from '../assets/images/specialty-catering.jpg';
@@ -55,14 +56,21 @@ const profileImageUrl = manifest.profileImageUrl;
         </div>
       </div>
       <div class="hero__portrait-wrap hero-enter" style="animation-delay: 0.15s;">
+        <div class="hero__arch"></div>
         <div class="hero__glow"></div>
-        <div class="hero__portrait img-zoom">
-          {profileImageUrl ? (
+        {profileImageUrl ? (
+          <div class="hero__portrait img-zoom">
             <img src={profileImageUrl} alt="Chef Elijah Kaseregenyi" width="420" height="520" />
-          ) : (
-            <Image src={chefPortrait} alt="Chef Elijah Kaseregenyi" width={420} height={520} />
-          )}
-        </div>
+          </div>
+        ) : (
+          <Image
+            src={chefPortraitCutout}
+            alt="Chef Elijah Kaseregenyi"
+            width={700}
+            height={933}
+            class="hero__portrait-cutout"
+          />
+        )}
         <div class="hero__badge">
           <span class="hero__badge-icon">&#9733;</span>
           Gold Medal Award Winner
@@ -195,6 +203,16 @@ const profileImageUrl = manifest.profileImageUrl;
     position: relative;
     max-width: 380px;
     margin: 0 auto;
+    aspect-ratio: 10 / 11;
+  }
+
+  .hero__arch {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(185deg, var(--surface), var(--bg-alt));
+    border: 1px solid var(--border);
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    z-index: 0;
   }
 
   .hero__glow {
@@ -205,19 +223,34 @@ const profileImageUrl = manifest.profileImageUrl;
     z-index: 0;
   }
 
+  /* Rectangular fallback frame, used only for admin-uploaded replacement photos */
   .hero__portrait {
-    position: relative;
+    position: absolute;
+    inset: 0;
     z-index: 1;
     border-radius: 50% 50% 0 0 / 100% 100% 0 0;
     border: 1px solid var(--border);
+    overflow: hidden;
   }
 
   .hero__portrait :global(img) {
     width: 100%;
-    height: auto;
-    aspect-ratio: 420 / 520;
+    height: 100%;
     object-fit: cover;
     display: block;
+  }
+
+  /* True background-removed cutout: sits on top of the arch, bottom-anchored
+     so the figure rises slightly above the arch like a real photo cutout. */
+  .hero__portrait-cutout {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 94%;
+    height: auto;
+    z-index: 2;
+    filter: drop-shadow(0 16px 24px rgba(0, 0, 0, 0.5));
   }
 
   .hero__badge {
