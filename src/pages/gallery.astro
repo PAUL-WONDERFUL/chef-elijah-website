@@ -26,7 +26,7 @@ const manifest = await getManifest();
         <div class="gallery-grid">
           {manifest.galleryImages.map((img) => (
             <div class="img-zoom gallery-tile">
-              <img src={img.url} alt="Chef Elijah Kaseregenyi's work" loading="lazy" />
+              <img src={img.url} data-lightbox={img.url} alt="Chef Elijah Kaseregenyi's work" loading="lazy" />
             </div>
           ))}
         </div>

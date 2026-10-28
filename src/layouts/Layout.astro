@@ -18,6 +18,11 @@ const navLinks = [
   { href: '/gallery', label: 'Gallery' },
   { href: '/contact', label: 'Contact' },
 ];
+
+const currentPath = Astro.url.pathname;
+const pageTitle = `${title} | Chef Elijah Kaseregenyi`;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL('/og-image.jpg', Astro.site);
 ---
 
 <!doctype html>
@@ -26,8 +31,21 @@ const navLinks = [
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title} | Chef Elijah Kaseregenyi</title>
+    <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageURL} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
     <ClientRouter />
   </head>
   <body>
@@ -40,7 +58,7 @@ const navLinks = [
           </button>
           <ul class="nav__list" id="navList">
             {navLinks.map((link) => (
-              <li><a href={link.href}>{link.label}</a></li>
+              <li><a href={link.href} class={currentPath === link.href ? 'active' : ''} aria-current={currentPath === link.href ? 'page' : undefined}>{link.label}</a></li>
             ))}
           </ul>
         </nav>
@@ -50,6 +68,15 @@ const navLinks = [
     <main>
       <slot />
     </main>
+
+    <button id="scrollTop" class="scroll-top" aria-label="Scroll to top">&uarr;</button>
+
+    <dialog id="lightbox" class="lightbox">
+      <button id="lightboxClose" class="lightbox__close" aria-label="Close">&times;</button>
+      <button id="lightboxPrev" class="lightbox__nav lightbox__nav--prev" aria-label="Previous photo">&lsaquo;</button>
+      <img id="lightboxImage" class="lightbox__image" alt="" />
+      <button id="lightboxNext" class="lightbox__nav lightbox__nav--next" aria-label="Next photo">&rsaquo;</button>
+    </dialog>
 
     <footer class="site-footer">
       <div class="container site-footer__inner">
@@ -68,7 +95,70 @@ const navLinks = [
         const list = document.getElementById('navList');
         toggle?.addEventListener('click', () => {
           const isOpen = list?.classList.toggle('is-open');
+          toggle.classList.toggle('is-open', !!isOpen);
           toggle.setAttribute('aria-expanded', String(!!isOpen));
+        });
+      }
+
+      function initScrollToTop() {
+        const button = document.getElementById('scrollTop');
+        if (!button) return;
+
+        const toggleVisibility = () => {
+          button.classList.toggle('is-visible', window.scrollY > 500);
+        };
+        toggleVisibility();
+        window.addEventListener('scroll', toggleVisibility, { passive: true });
+
+        button.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      function initLightbox() {
+        const triggers = Array.from(document.querySelectorAll<HTMLElement>('[data-lightbox]'));
+        if (!triggers.length) return;
+
+        const dialog = document.getElementById('lightbox') as HTMLDialogElement | null;
+        const image = document.getElementById('lightboxImage') as HTMLImageElement | null;
+        const closeBtn = document.getElementById('lightboxClose');
+        const prevBtn = document.getElementById('lightboxPrev');
+        const nextBtn = document.getElementById('lightboxNext');
+        if (!dialog || !image || !closeBtn || !prevBtn || !nextBtn) return;
+
+        let currentIndex = 0;
+
+        const show = (index: number) => {
+          currentIndex = (index + triggers.length) % triggers.length;
+          const el = triggers[currentIndex];
+          const src = el.getAttribute('data-lightbox') || (el as HTMLImageElement).src;
+          const alt = el.getAttribute('alt') || '';
+          image.src = src;
+          image.alt = alt;
+          const multiple = triggers.length > 1;
+          prevBtn.style.display = multiple ? '' : 'none';
+          nextBtn.style.display = multiple ? '' : 'none';
+        };
+
+        triggers.forEach((el, index) => {
+          el.style.cursor = 'zoom-in';
+          el.addEventListener('click', () => {
+            show(index);
+            dialog.showModal();
+          });
+        });
+
+        closeBtn.addEventListener('click', () => dialog.close());
+        prevBtn.addEventListener('click', () => show(currentIndex - 1));
+        nextBtn.addEventListener('click', () => show(currentIndex + 1));
+
+        dialog.addEventListener('click', (event) => {
+          if (event.target === dialog) dialog.close();
+        });
+
+        dialog.addEventListener('keydown', (event) => {
+          if (event.key === 'ArrowLeft') show(currentIndex - 1);
+          if (event.key === 'ArrowRight') show(currentIndex + 1);
         });
       }
 
@@ -98,6 +188,8 @@ const navLinks = [
       document.addEventListener('astro:page-load', () => {
         initNavToggle();
         initScrollReveal();
+        initScrollToTop();
+        initLightbox();
       });
     </script>
 
@@ -174,6 +266,15 @@ const navLinks = [
         transform-origin: left;
       }
 
+      .nav__list a.active {
+        color: var(--accent-dark);
+      }
+
+      .nav__list a.active::after {
+        transform: scaleX(1);
+        transform-origin: left;
+      }
+
       .nav__toggle {
         display: none;
         background: none;
@@ -182,20 +283,24 @@ const navLinks = [
         padding: 0.5rem;
       }
 
-      .nav__toggle span,
-      .nav__toggle span::before,
-      .nav__toggle span::after {
+      .nav__toggle span {
         display: block;
         width: 22px;
         height: 2px;
         background: var(--ink);
         position: relative;
+        transition: background 0.2s ease;
       }
 
       .nav__toggle span::before,
       .nav__toggle span::after {
         content: '';
         position: absolute;
+        display: block;
+        width: 22px;
+        height: 2px;
+        background: var(--ink);
+        transition: transform 0.25s ease, top 0.25s ease;
       }
 
       .nav__toggle span::before {
@@ -204,6 +309,20 @@ const navLinks = [
 
       .nav__toggle span::after {
         top: 6px;
+      }
+
+      .nav__toggle.is-open span {
+        background: transparent;
+      }
+
+      .nav__toggle.is-open span::before {
+        top: 0;
+        transform: rotate(45deg);
+      }
+
+      .nav__toggle.is-open span::after {
+        top: 0;
+        transform: rotate(-45deg);
       }
 
       .site-footer {
@@ -251,6 +370,124 @@ const navLinks = [
 
         .nav__list.is-open {
           display: flex;
+        }
+      }
+
+      .scroll-top {
+        position: fixed;
+        right: 1.5rem;
+        bottom: 1.5rem;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        background: var(--bg);
+        color: var(--accent-dark);
+        font-size: 1.2rem;
+        line-height: 1;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 24px -12px rgba(43, 35, 32, 0.3);
+        opacity: 0;
+        transform: translateY(8px);
+        pointer-events: none;
+        transition: opacity 0.25s ease, transform 0.25s ease, background 0.2s ease, color 0.2s ease;
+        z-index: 30;
+      }
+
+      .scroll-top.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .scroll-top:hover {
+        background: var(--accent);
+        color: #fff;
+      }
+
+      .lightbox {
+        border: none;
+        padding: 0;
+        background: transparent;
+        max-width: 92vw;
+        max-height: 92vh;
+      }
+
+      .lightbox::backdrop {
+        background: rgba(20, 16, 14, 0.88);
+      }
+
+      .lightbox__image {
+        display: block;
+        max-width: 92vw;
+        max-height: 92vh;
+        border-radius: 4px;
+      }
+
+      .lightbox__close,
+      .lightbox__nav {
+        position: fixed;
+        background: rgba(20, 16, 14, 0.55);
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s ease;
+      }
+
+      .lightbox__close:hover,
+      .lightbox__nav:hover {
+        background: rgba(20, 16, 14, 0.85);
+      }
+
+      .lightbox__close {
+        top: 1.5rem;
+        right: 1.5rem;
+        width: 40px;
+        height: 40px;
+        font-size: 1.5rem;
+      }
+
+      .lightbox__nav {
+        top: 50%;
+        transform: translateY(-50%);
+        width: 48px;
+        height: 48px;
+        font-size: 2rem;
+      }
+
+      .lightbox__nav--prev {
+        left: 1.5rem;
+      }
+
+      .lightbox__nav--next {
+        right: 1.5rem;
+      }
+
+      @media (max-width: 640px) {
+        .scroll-top {
+          right: 1rem;
+          bottom: 1rem;
+        }
+
+        .lightbox__nav {
+          width: 40px;
+          height: 40px;
+          font-size: 1.6rem;
+        }
+
+        .lightbox__nav--prev {
+          left: 0.5rem;
+        }
+
+        .lightbox__nav--next {
+          right: 0.5rem;
         }
       }
     </style>

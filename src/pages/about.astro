@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { Image } from 'astro:assets';
+import { getImage } from 'astro:assets';
 import withColleague from '../assets/images/chef-elijah-with-colleague.jpg';
 import dessertDisplay from '../assets/images/chef-elijah-dessert-display.jpg';
 
@@ -9,6 +9,9 @@ const languages = [
   { name: 'French', level: 'Good' },
   { name: 'Swahili', level: 'Very Good' },
 ];
+
+const withColleagueImg = await getImage({ src: withColleague, width: 900, height: 1125 });
+const dessertDisplayImg = await getImage({ src: dessertDisplay, width: 900, height: 1125 });
 ---
 
 <Layout title="About" description="About Chef Elijah Kaseregenyi — career, training and background.">
@@ -46,10 +49,24 @@ const languages = [
 
       <div class="photo-row">
         <figure class="img-zoom">
-          <Image src={withColleague} alt="Chef Elijah Kaseregenyi with a fellow chef at an East African culinary event" width={500} height={625} />
+          <img
+            src={withColleagueImg.src}
+            data-lightbox={withColleagueImg.src}
+            alt="Chef Elijah Kaseregenyi with a fellow chef at an East African culinary event"
+            width="900"
+            height="1125"
+            loading="lazy"
+          />
         </figure>
         <figure class="img-zoom">
-          <Image src={dessertDisplay} alt="Chef Elijah Kaseregenyi presenting a dessert and pastry display" width={500} height={625} />
+          <img
+            src={dessertDisplayImg.src}
+            data-lightbox={dessertDisplayImg.src}
+            alt="Chef Elijah Kaseregenyi presenting a dessert and pastry display"
+            width="900"
+            height="1125"
+            loading="lazy"
+          />
         </figure>
       </div>
 
