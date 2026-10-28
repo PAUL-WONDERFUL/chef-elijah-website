@@ -1,13 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
 
 :root {
-  --bg: #faf7f2;
-  --bg-alt: #f1ebe1;
-  --ink: #2b2320;
-  --ink-soft: #5c5148;
-  --accent: #a8762f;
-  --accent-dark: #7d551f;
-  --border: #e2d8c8;
+  /* Dark theme: --accent-dark is the brighter gold (for text/links), --accent
+     is the deeper gold (for fills/borders) — inverted from a light-theme
+     naming convention, kept for minimal diff against existing usage. */
+  --bg: #1a1512;
+  --bg-alt: #221b16;
+  --surface: #2a2119;
+  --ink: #f4ede1;
+  --ink-soft: #c3b5a2;
+  --accent: #b8863b;
+  --accent-dark: #e3b764;
+  --border: #42352b;
   --max-width: 1080px;
 }
 
@@ -83,7 +87,7 @@ img {
 
 .btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px -12px rgba(168, 118, 47, 0.55);
+  box-shadow: 0 0 22px rgba(201, 154, 74, 0.4), 0 10px 20px -10px rgba(0, 0, 0, 0.6);
 }
 
 .btn:active {
@@ -112,7 +116,7 @@ img {
 }
 
 .card {
-  background: #fff;
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 1.75rem;
@@ -122,7 +126,7 @@ img {
 .card:hover {
   transform: translateY(-4px);
   border-color: var(--accent);
-  box-shadow: 0 16px 32px -20px rgba(43, 35, 32, 0.25), 0 0 0 1px rgba(168, 118, 47, 0.15);
+  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.7), 0 0 24px -4px rgba(201, 154, 74, 0.35);
 }
 
 .img-zoom {
