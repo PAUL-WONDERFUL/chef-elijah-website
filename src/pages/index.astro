@@ -2,6 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import chefPortrait from '../assets/images/chef-elijah-portrait.jpg';
+import specialtyDesserts from '../assets/images/specialty-desserts.jpg';
+import specialtyPastry from '../assets/images/specialty-pastry.jpg';
+import specialtyCatering from '../assets/images/specialty-catering.jpg';
 import { getManifest } from '../lib/blobStore';
 
 export const prerender = false;
@@ -10,6 +13,24 @@ const highlights = [
   { number: '35+', label: 'Years in professional kitchens' },
   { number: '4', label: 'Countries worked across' },
   { number: '6', label: 'Leadership & consultant roles' },
+];
+
+const specialties = [
+  {
+    image: specialtyDesserts,
+    title: 'Classic Dessert Artistry',
+    description: 'Chocolate art, decoration, pralines and truffles, built on refined European technique.',
+  },
+  {
+    image: specialtyPastry,
+    title: 'International Pastry & Baking',
+    description: 'Master Bakers trained in Switzerland, with bread technology and international cake making.',
+  },
+  {
+    image: specialtyCatering,
+    title: 'Buffet & Event Catering',
+    description: 'Menu engineering, large-scale buffet set-ups and full event catering management.',
+  },
 ];
 
 const manifest = await getManifest();
@@ -33,12 +54,19 @@ const profileImageUrl = manifest.profileImageUrl;
           <a class="btn btn--ghost" href="/experience">View Experience</a>
         </div>
       </div>
-      <div class="hero__portrait hero-enter img-zoom" style="animation-delay: 0.15s;">
-        {profileImageUrl ? (
-          <img src={profileImageUrl} alt="Chef Elijah Kaseregenyi" width="420" height="520" />
-        ) : (
-          <Image src={chefPortrait} alt="Chef Elijah Kaseregenyi" width={420} height={520} />
-        )}
+      <div class="hero__portrait-wrap hero-enter" style="animation-delay: 0.15s;">
+        <div class="hero__glow"></div>
+        <div class="hero__portrait img-zoom">
+          {profileImageUrl ? (
+            <img src={profileImageUrl} alt="Chef Elijah Kaseregenyi" width="420" height="520" />
+          ) : (
+            <Image src={chefPortrait} alt="Chef Elijah Kaseregenyi" width={420} height={520} />
+          )}
+        </div>
+        <div class="hero__badge">
+          <span class="hero__badge-icon">&#9733;</span>
+          Gold Medal Award Winner
+        </div>
       </div>
     </div>
   </section>
@@ -55,6 +83,24 @@ const profileImageUrl = manifest.profileImageUrl;
   </section>
 
   <section class="section">
+    <div class="container">
+      <span class="eyebrow">Specialties</span>
+      <h2>Areas of Expertise</h2>
+      <div class="grid grid--3 specialties-grid">
+        {specialties.map((item) => (
+          <div class="card specialty-card">
+            <div class="specialty-card__img img-zoom">
+              <Image src={item.image} alt={item.title} width={240} height={240} />
+            </div>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
     <div class="container intro">
       <div>
         <span class="eyebrow">Career Objective</span>
@@ -145,13 +191,55 @@ const profileImageUrl = manifest.profileImageUrl;
     flex-wrap: wrap;
   }
 
+  .hero__portrait-wrap {
+    position: relative;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+
+  .hero__glow {
+    position: absolute;
+    inset: 6% 2% 10% 2%;
+    background: radial-gradient(circle, rgba(201, 154, 74, 0.45), transparent 70%);
+    filter: blur(32px);
+    z-index: 0;
+  }
+
+  .hero__portrait {
+    position: relative;
+    z-index: 1;
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    border: 1px solid var(--border);
+  }
+
   .hero__portrait :global(img) {
     width: 100%;
     height: auto;
     aspect-ratio: 420 / 520;
     object-fit: cover;
-    border-radius: 8px;
-    border: 1px solid var(--border);
+    display: block;
+  }
+
+  .hero__badge {
+    position: absolute;
+    top: 1.5rem;
+    right: -1.25rem;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    padding: 0.55rem 1.1rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink);
+    box-shadow: 0 0 20px rgba(201, 154, 74, 0.3), 0 8px 20px -8px rgba(0, 0, 0, 0.6);
+  }
+
+  .hero__badge-icon {
+    color: var(--accent-dark);
   }
 
   @media (max-width: 780px) {
@@ -159,9 +247,14 @@ const profileImageUrl = manifest.profileImageUrl;
       grid-template-columns: 1fr;
     }
 
-    .hero__portrait {
-      max-width: 320px;
-      margin: 0 auto;
+    .hero__portrait-wrap {
+      max-width: 280px;
+    }
+
+    .hero__badge {
+      right: 0;
+      font-size: 0.75rem;
+      padding: 0.45rem 0.85rem;
     }
   }
 
@@ -184,5 +277,39 @@ const profileImageUrl = manifest.profileImageUrl;
 
   .intro {
     max-width: 720px;
+  }
+
+  .specialties-grid {
+    margin-top: 1.5rem;
+  }
+
+  .specialty-card {
+    text-align: center;
+  }
+
+  .specialty-card__img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    margin: 0 auto 1.25rem;
+  }
+
+  .specialty-card__img :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .specialty-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .specialty-card p {
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+    margin: 0;
   }
 </style>
